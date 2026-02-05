@@ -5,7 +5,6 @@ import { Mic, MicOff, X, Loader2, MessageCircle, Send, Keyboard, GraduationCap, 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 const ELEVENLABS_AGENT_ID = "agent_2601kfx2xrd5emmbts6ss7m5146j";
 
@@ -16,6 +15,14 @@ const QUICK_QUESTIONS = [
   { icon: HelpCircle, text: "How do I apply?" },
 ];
 
+// Fallback responses when API is not available
+const FALLBACK_RESPONSES: Record<string, string> = {
+  "What are the admission requirements?": "To apply to DUSOM, you need to be a born-again Christian, have a letter of recommendation from your pastor, and complete our online application form. Visit our Admissions page for full details.",
+  "Tell me about the courses offered": "DUSOM offers courses in Biblical Studies, Ministry Leadership, Evangelism, Church Planting, and more. Our curriculum is designed to equip you for effective ministry.",
+  "When is the next session?": "Our next session begins in January 2026. Applications are currently open! Early registration is encouraged as spaces fill up quickly.",
+  "How do I apply?": "You can apply online through our website. Click the 'Apply Now' button on the homepage, fill out the application form, and submit the required documents including your pastoral recommendation.",
+};
+
 export function VoiceAgentButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -23,6 +30,7 @@ export function VoiceAgentButton() {
   const [textInput, setTextInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [transcripts, setTranscripts] = useState<{ role: "user" | "agent"; text: string }[]>([]);
+  const [useFallback, setUseFallback] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -73,28 +81,43 @@ export function VoiceAgentButton() {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // Get token from edge function
-      const { data, error } = await supabase.functions.invoke("elevenlabs-conversation-token", {
-        body: { agent_id: ELEVENLABS_AGENT_ID },
+      // Get signed URL from backend API (which calls ElevenLabs)
+      const response = await fetch('/api/voice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'token', agent_id: ELEVENLABS_AGENT_ID }),
       });
 
-      if (error || !data?.token) {
-        throw new Error(error?.message || "Failed to get conversation token");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error("Voice token error:", response.status, errorData);
+        throw new Error(errorData.error || `Failed to get conversation token: ${response.status}`);
       }
 
-      // Start the conversation with WebRTC
+      const data = await response.json();
+      
+      if (!data.token && !data.signed_url) {
+        throw new Error("No token returned from server");
+      }
+
+      // Start the conversation with WebRTC using the signed URL
       await conversation.startSession({
-        conversationToken: data.token,
-        connectionType: "webrtc",
+        signedUrl: data.token || data.signed_url,
       });
 
     } catch (error) {
       console.error("Failed to start conversation:", error);
       setIsConnecting(false);
+      
+      // Enable fallback mode
+      setUseFallback(true);
+      setMode("text");
       toast({
-        variant: "destructive",
-        title: "Connection Failed",
-        description: error instanceof Error ? error.message : "Failed to connect to voice agent.",
+        variant: "default",
+        title: "Voice Mode Unavailable",
+        description: "Switched to text mode. You can still chat with our assistant.",
       });
     }
   }, [conversation, toast]);
@@ -112,30 +135,46 @@ export function VoiceAgentButton() {
     setTranscripts(prev => [...prev, { role: "user", text: messageToSend }]);
 
     try {
-      const { data, error } = await supabase.functions.invoke("elevenlabs-text-chat", {
-        body: { 
+      // Call backend API which proxies to ElevenLabs
+      const response = await fetch('/api/voice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'chat',
           agent_id: ELEVENLABS_AGENT_ID,
           message: messageToSend,
-          conversation_history: transcripts
-        },
+          conversation_history: transcripts.map(t => ({
+            role: t.role,
+            content: t.text,
+          })),
+        }),
       });
 
-      if (error) throw new Error(error.message);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
 
       if (data?.response) {
         setTranscripts(prev => [...prev, { role: "agent", text: data.response }]);
+      } else {
+        throw new Error("No response from agent");
       }
     } catch (error) {
       console.error("Failed to send message:", error);
-      toast({
-        variant: "destructive",
-        title: "Message Failed",
-        description: "Couldn't send your message. Please try again.",
-      });
+      
+      // Use fallback response
+      const fallbackResponse = FALLBACK_RESPONSES[messageToSend] || 
+        "I apologize, but I'm having trouble connecting to my knowledge base. Please visit our website at dusomabuja.org or contact us directly for assistance. You can also email us at info@dusomabuja.org.";
+      
+      setTranscripts(prev => [...prev, { role: "agent", text: fallbackResponse }]);
     } finally {
       setIsSending(false);
     }
-  }, [textInput, isSending, transcripts, toast]);
+  }, [textInput, isSending, transcripts]);
 
   const handleQuickQuestion = (question: string) => {
     sendTextMessage(question);
@@ -229,10 +268,12 @@ export function VoiceAgentButton() {
                     mode === "voice"
                       ? "bg-background text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  } ${useFallback ? "opacity-50 cursor-not-allowed" : ""}`}
+                  disabled={useFallback}
                 >
                   <Mic className="h-4 w-4" />
                   Voice
+                  {useFallback && <span className="text-xs">(Unavailable)</span>}
                 </button>
                 <button
                   onClick={() => setMode("text")}
@@ -251,7 +292,7 @@ export function VoiceAgentButton() {
             {/* Content */}
             <div className="p-4 space-y-4">
               {/* Status (Voice mode only) */}
-              {mode === "voice" && (
+              {mode === "voice" && !useFallback && (
                 <div className="flex items-center gap-2 text-sm">
                   <div
                     className={`w-2 h-2 rounded-full ${
@@ -267,6 +308,13 @@ export function VoiceAgentButton() {
                         : "Listening..."
                       : "Ready to connect"}
                   </span>
+                </div>
+              )}
+
+              {/* Fallback notice */}
+              {useFallback && (
+                <div className="bg-yellow-100 text-yellow-800 rounded-lg p-2 text-xs">
+                  Voice mode is temporarily unavailable. Please use text mode.
                 </div>
               )}
 
@@ -334,7 +382,7 @@ export function VoiceAgentButton() {
               )}
 
               {/* Voice Mode Controls */}
-              {mode === "voice" && (
+              {mode === "voice" && !useFallback && (
                 <>
                   {conversation.status === "disconnected" ? (
                     <Button

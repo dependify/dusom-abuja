@@ -1,102 +1,99 @@
-# DUSOM Application Startup Script
-# Starts both backend and frontend services
+# DUSOM Abuja - Start Application
+# This script starts both the backend API and frontend dev server
 
-$backendEnv = @{
-    DATABASE_URL = "postgres://postgres:5kDSaWZSSqUDUIZ4x2iK16Ehg3YeGa6P6CiOUb5VtAwIkJqKXUbieKqcMQryoQhm@158.158.1.40:5432/dusom?sslmode=disable"
-    JWT_SECRET = "dusom-super-secret-key-for-jwt-signing-2024"
-    PORT = "3001"
-    CORS_ORIGINS = "http://localhost:8080,http://127.0.0.1:8080,http://localhost:5173"
-    UPLOAD_DIR = "./uploads"
-    NODE_ENV = "development"
+$ErrorActionPreference = "Stop"
+
+Write-Host @"
+╔══════════════════════════════════════════╗
+║       DUSOM Abuja - Starting App         ║
+╚══════════════════════════════════════════╝
+"@ -ForegroundColor Cyan
+
+# Function to check if a port is in use
+function Test-PortInUse {
+    param($Port)
+    $connection = Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue
+    return $connection -ne $null
 }
 
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  Starting DUSOM Application" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host ""
+# Kill any existing node processes on ports 3001 and 8080
+Write-Host "Cleaning up existing processes..." -ForegroundColor Yellow
+Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue | 
+    Select-Object -ExpandProperty OwningProcess | 
+    Get-Unique | 
+    ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }
+
+Start-Sleep -Seconds 2
 
 # Start Backend
-Write-Host "[1/2] Starting Backend API..." -ForegroundColor Yellow
-$backendJob = Start-Job -ScriptBlock {
-    param($envVars)
-    Set-Location C:\Users\USER\dusom-abuja\backend
-    
-    # Set environment variables
-    $env:DATABASE_URL = $envVars.DATABASE_URL
-    $env:JWT_SECRET = $envVars.JWT_SECRET
-    $env:PORT = $envVars.PORT
-    $env:CORS_ORIGINS = $envVars.CORS_ORIGINS
-    $env:UPLOAD_DIR = $envVars.UPLOAD_DIR
-    $env:NODE_ENV = $envVars.NODE_ENV
-    
-    & node dist/index.js
-} -ArgumentList $backendEnv
+Write-Host "`n🚀 Starting Backend API..." -ForegroundColor Green
+Set-Location backend
+$backendJob = Start-Job -ScriptBlock { 
+    node dist/index.js 
+}
+Set-Location ..
 
-# Wait for backend to start
 Start-Sleep -Seconds 3
-$backendTest = Invoke-WebRequest -Uri "http://localhost:3001/health" -UseBasicParsing -TimeoutSec 5 -ErrorAction SilentlyContinue
-if ($backendTest.StatusCode -eq 200) {
-    Write-Host "      ✓ Backend running on http://localhost:3001" -ForegroundColor Green
+
+# Check if backend started
+if (Test-PortInUse -Port 3001) {
+    Write-Host "✅ Backend running on http://localhost:3001" -ForegroundColor Green
 } else {
-    Write-Host "      ✗ Backend failed to start" -ForegroundColor Red
+    Write-Host "❌ Backend failed to start" -ForegroundColor Red
     Receive-Job $backendJob
+    exit 1
 }
 
 # Start Frontend
-Write-Host "[2/2] Starting Frontend..." -ForegroundColor Yellow
+Write-Host "`n🚀 Starting Frontend..." -ForegroundColor Green
 $frontendJob = Start-Job -ScriptBlock {
-    Set-Location C:\Users\USER\dusom-abuja
-    & npm run dev
+    npm run dev
 }
 
-# Wait for frontend to start
 Start-Sleep -Seconds 5
-$frontendTest = Invoke-WebRequest -Uri "http://localhost:8080" -UseBasicParsing -TimeoutSec 5 -ErrorAction SilentlyContinue
-if ($frontendTest.StatusCode -eq 200) {
-    Write-Host "      ✓ Frontend running on http://localhost:8080" -ForegroundColor Green
+
+# Check if frontend started
+if (Test-PortInUse -Port 8080) {
+    Write-Host "✅ Frontend running on http://localhost:8080" -ForegroundColor Green
 } else {
-    Write-Host "      ✗ Frontend failed to start" -ForegroundColor Red
+    Write-Host "❌ Frontend failed to start" -ForegroundColor Red
     Receive-Job $frontendJob
+    exit 1
 }
 
-Write-Host ""
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  DUSOM Application Started!" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "  Frontend: http://localhost:8080" -ForegroundColor White
-Write-Host "  Backend:  http://localhost:3001" -ForegroundColor White
-Write-Host "  Health:   http://localhost:3001/health" -ForegroundColor White
-Write-Host ""
-Write-Host "  Admin Login:" -ForegroundColor Yellow
-Write-Host "    URL:      http://localhost:8080/admin/login" -ForegroundColor White
-Write-Host "    Email:    admin@dusomabuja.org" -ForegroundColor White
-Write-Host "    Password: admin123" -ForegroundColor White
-Write-Host ""
-Write-Host "  Press Ctrl+C to stop" -ForegroundColor Magenta
-Write-Host ""
+Write-Host @"
+
+╔══════════════════════════════════════════╗
+║         ✅ App Started Successfully!      ║
+╠══════════════════════════════════════════╣
+║  Frontend: http://localhost:8080          ║
+║  Backend:  http://localhost:3001          ║
+║  API Docs: http://localhost:3001/health   ║
+╚══════════════════════════════════════════╝
+
+Press Ctrl+C to stop both servers
+"@ -ForegroundColor Cyan
 
 # Keep the script running and show logs
 try {
     while ($true) {
-        $backendOutput = Receive-Job $backendJob -ErrorAction SilentlyContinue
-        $frontendOutput = Receive-Job $frontendJob -ErrorAction SilentlyContinue
-        
-        if ($backendOutput) {
-            Write-Host "[BACKEND] $backendOutput" -ForegroundColor Blue
+        if ($backendJob.State -eq "Failed") {
+            Write-Host "`n❌ Backend crashed!" -ForegroundColor Red
+            Receive-Job $backendJob
+            break
         }
-        if ($frontendOutput) {
-            Write-Host "[FRONTEND] $frontendOutput" -ForegroundColor Green
+        if ($frontendJob.State -eq "Failed") {
+            Write-Host "`n❌ Frontend crashed!" -ForegroundColor Red
+            Receive-Job $frontendJob
+            break
         }
-        
-        Start-Sleep -Seconds 1
+        Start-Sleep -Seconds 2
     }
 } finally {
-    Write-Host "`nStopping services..." -ForegroundColor Yellow
+    Write-Host "`n🛑 Stopping servers..." -ForegroundColor Yellow
     Stop-Job $backendJob -ErrorAction SilentlyContinue
     Stop-Job $frontendJob -ErrorAction SilentlyContinue
     Remove-Job $backendJob -ErrorAction SilentlyContinue
     Remove-Job $frontendJob -ErrorAction SilentlyContinue
-    taskkill /F /IM node.exe 2>$null
-    Write-Host "Services stopped." -ForegroundColor Green
+    Write-Host "✅ Servers stopped" -ForegroundColor Green
 }

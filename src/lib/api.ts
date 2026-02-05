@@ -1,7 +1,9 @@
 // DUSOM API Client
 // Replaces Supabase with direct API calls to the backend
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+// Use relative API URL for Vercel monolithic deployment
+// In production, API routes are at /api/* via serverless functions
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 // Storage keys
 const ACCESS_TOKEN_KEY = 'dusom_access_token';
