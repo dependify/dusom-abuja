@@ -5,6 +5,7 @@ import { Mic, MicOff, X, Loader2, MessageCircle, Send, Keyboard, GraduationCap, 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const ELEVENLABS_AGENT_ID = "agent_2601kfx2xrd5emmbts6ss7m5146j";
 
@@ -37,14 +38,14 @@ export function VoiceAgentButton() {
     onMessage: (message: any) => {
       console.log("Voice agent message:", message);
       if (message.type === "user_transcript" && message.user_transcription_event?.user_transcript) {
-        setTranscripts(prev => [...prev, {
-          role: "user",
-          text: message.user_transcription_event.user_transcript
+        setTranscripts(prev => [...prev, { 
+          role: "user", 
+          text: message.user_transcription_event.user_transcript 
         }]);
       } else if (message.type === "agent_response" && message.agent_response_event?.agent_response) {
-        setTranscripts(prev => [...prev, {
-          role: "agent",
-          text: message.agent_response_event.agent_response
+        setTranscripts(prev => [...prev, { 
+          role: "agent", 
+          text: message.agent_response_event.agent_response 
         }]);
       }
     },
@@ -72,9 +73,18 @@ export function VoiceAgentButton() {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // For public agents, connect directly with agentId - no token needed!
+      // Get token from edge function
+      const { data, error } = await supabase.functions.invoke("elevenlabs-conversation-token", {
+        body: { agent_id: ELEVENLABS_AGENT_ID },
+      });
+
+      if (error || !data?.token) {
+        throw new Error(error?.message || "Failed to get conversation token");
+      }
+
+      // Start the conversation with WebRTC
       await conversation.startSession({
-        agentId: ELEVENLABS_AGENT_ID,
+        conversationToken: data.token,
         connectionType: "webrtc",
       });
 
@@ -102,19 +112,18 @@ export function VoiceAgentButton() {
     setTranscripts(prev => [...prev, { role: "user", text: messageToSend }]);
 
     try {
-      // If not connected, start a text-only session first
-      if (conversation.status === "disconnected") {
-        await conversation.startSession({
-          agentId: ELEVENLABS_AGENT_ID,
-          connectionType: "webrtc",
-        });
-        // Wait a bit for connection to establish
-        await new Promise(resolve => setTimeout(resolve, 500));
-      }
+      const { data, error } = await supabase.functions.invoke("elevenlabs-text-chat", {
+        body: { 
+          agent_id: ELEVENLABS_AGENT_ID,
+          message: messageToSend,
+          conversation_history: transcripts
+        },
+      });
 
-      // Send message using the SDK
-      if (conversation.status === "connected") {
-        conversation.sendUserMessage(messageToSend);
+      if (error) throw new Error(error.message);
+
+      if (data?.response) {
+        setTranscripts(prev => [...prev, { role: "agent", text: data.response }]);
       }
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -126,7 +135,7 @@ export function VoiceAgentButton() {
     } finally {
       setIsSending(false);
     }
-  }, [textInput, isSending, conversation, toast]);
+  }, [textInput, isSending, transcripts, toast]);
 
   const handleQuickQuestion = (question: string) => {
     sendTextMessage(question);
@@ -158,10 +167,11 @@ export function VoiceAgentButton() {
         <Button
           onClick={toggleOpen}
           size="lg"
-          className={`rounded-full w-14 h-14 shadow-lg transition-all duration-300 ${conversation.status === "connected"
-            ? "bg-accent-green hover:bg-accent-green/90"
-            : "bg-accent-gold hover:bg-accent-orange"
-            }`}
+          className={`rounded-full w-14 h-14 shadow-lg transition-all duration-300 ${
+            conversation.status === "connected"
+              ? "bg-accent-green hover:bg-accent-green/90"
+              : "bg-accent-gold hover:bg-accent-orange"
+          }`}
         >
           <AnimatePresence mode="wait">
             {isOpen ? (
@@ -215,20 +225,22 @@ export function VoiceAgentButton() {
               <div className="flex gap-1 p-1 bg-muted rounded-lg">
                 <button
                   onClick={() => setMode("voice")}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors ${mode === "voice"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                    }`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                    mode === "voice"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   <Mic className="h-4 w-4" />
                   Voice
                 </button>
                 <button
                   onClick={() => setMode("text")}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors ${mode === "text"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                    }`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                    mode === "text"
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   <Keyboard className="h-4 w-4" />
                   Text
@@ -242,10 +254,11 @@ export function VoiceAgentButton() {
               {mode === "voice" && (
                 <div className="flex items-center gap-2 text-sm">
                   <div
-                    className={`w-2 h-2 rounded-full ${conversation.status === "connected"
-                      ? "bg-accent-green"
-                      : "bg-muted-foreground"
-                      }`}
+                    className={`w-2 h-2 rounded-full ${
+                      conversation.status === "connected"
+                        ? "bg-accent-green"
+                        : "bg-muted-foreground"
+                    }`}
                   />
                   <span className="text-muted-foreground">
                     {conversation.status === "connected"
@@ -269,11 +282,11 @@ export function VoiceAgentButton() {
                       👋 Welcome to DUSOM!
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      I'm here to help you with admissions to Dunamis School of Ministry.
+                      I'm here to help you with admissions to Dunamis School of Ministry. 
                       Ask me about requirements, courses, application process, or session dates.
                     </p>
                   </div>
-
+                  
                   {mode === "text" && (
                     <div className="space-y-2">
                       <p className="text-xs font-medium text-muted-foreground">Quick questions:</p>
@@ -304,10 +317,11 @@ export function VoiceAgentButton() {
                   {transcripts.map((t, i) => (
                     <div
                       key={i}
-                      className={`p-2 rounded-lg ${t.role === "user"
-                        ? "bg-primary/10 text-foreground ml-4"
-                        : "bg-accent-gold/10 text-foreground mr-4"
-                        }`}
+                      className={`p-2 rounded-lg ${
+                        t.role === "user"
+                          ? "bg-primary/10 text-foreground ml-4"
+                          : "bg-accent-gold/10 text-foreground mr-4"
+                      }`}
                     >
                       <span className="font-medium text-xs text-muted-foreground block mb-1">
                         {t.role === "user" ? "You" : "Assistant"}

@@ -431,22 +431,74 @@ const createFunctionsClient = () => ({
           return { data: { success: true }, error: null };
         },
         'elevenlabs-conversation-token': async () => {
-          const response = await fetch('/api/voice/token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(options?.body || {}),
-          });
-          const data = await response.json();
-          return { data, error: null };
+          try {
+            const response = await fetch('/api/voice/token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(options?.body || {}),
+            });
+            
+            // Check if response is OK
+            if (!response.ok) {
+              const errorText = await response.text();
+              console.error('Voice token API error:', response.status, errorText);
+              return { data: null, error: { message: `API error: ${response.status}` } };
+            }
+            
+            // Check for empty response
+            const text = await response.text();
+            if (!text) {
+              console.error('Voice token API returned empty response');
+              return { data: null, error: { message: 'Empty response from server' } };
+            }
+            
+            // Parse JSON safely
+            try {
+              const data = JSON.parse(text);
+              return { data, error: null };
+            } catch (parseError) {
+              console.error('Voice token API returned invalid JSON:', text.substring(0, 200));
+              return { data: null, error: { message: 'Invalid JSON response from server' } };
+            }
+          } catch (fetchError: any) {
+            console.error('Voice token fetch error:', fetchError);
+            return { data: null, error: { message: fetchError.message || 'Network error' } };
+          }
         },
         'elevenlabs-text-chat': async () => {
-          const response = await fetch('/api/voice/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(options?.body || {}),
-          });
-          const data = await response.json();
-          return { data, error: null };
+          try {
+            const response = await fetch('/api/voice/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(options?.body || {}),
+            });
+            
+            // Check if response is OK
+            if (!response.ok) {
+              const errorText = await response.text();
+              console.error('Voice chat API error:', response.status, errorText);
+              return { data: null, error: { message: `API error: ${response.status}` } };
+            }
+            
+            // Check for empty response
+            const text = await response.text();
+            if (!text) {
+              console.error('Voice chat API returned empty response');
+              return { data: null, error: { message: 'Empty response from server' } };
+            }
+            
+            // Parse JSON safely
+            try {
+              const data = JSON.parse(text);
+              return { data, error: null };
+            } catch (parseError) {
+              console.error('Voice chat API returned invalid JSON:', text.substring(0, 200));
+              return { data: null, error: { message: 'Invalid JSON response from server' } };
+            }
+          } catch (fetchError: any) {
+            console.error('Voice chat fetch error:', fetchError);
+            return { data: null, error: { message: fetchError.message || 'Network error' } };
+          }
         },
       };
 
