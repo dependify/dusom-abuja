@@ -1,0 +1,7 @@
+project_id = "ihsrkegapfaetadapjor"
+
+[functions.elevenlabs-conversation-token]
+verify_jwt = false
+
+[functions.elevenlabs-text-chat]
+verify_jwt = false
