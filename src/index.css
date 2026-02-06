@@ -296,9 +296,13 @@
 }
 
 @layer utilities {
-  /* Text balance for headings */
+  /* Text balance for headings - with fallback for Firefox */
   .text-balance {
     text-wrap: balance;
+    /* Fallback for browsers that don't support text-wrap: balance */
+    @supports not (text-wrap: balance) {
+      /* Firefox and older browsers */
+    }
   }
 
   /* Hero section specific utilities */

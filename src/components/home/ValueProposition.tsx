@@ -77,7 +77,7 @@ export function ValueProposition() {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <h2 className="text-foreground text-balance">
+            <h2 className="text-foreground">
               More Than Academic{" "}
               <span className="text-primary">Knowledge</span>
             </h2>

@@ -59,15 +59,13 @@ export function HeroSection() {
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="none"
             poster={heroBg}
             onLoadedData={handleVideoLoaded}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
           >
-            {/* Desktop video - higher quality */}
-            <source src={heroVideoDesktop} type="video/mp4" media="(min-width: 768px)" />
-            {/* Mobile video - optimized for smaller screens */}
-            <source src={heroVideoMobile} type="video/mp4" />
+            {/* Note: Firefox has issues with media attribute on source elements */}
+            <source src={heroVideoDesktop} type="video/mp4" />
             {/* Fallback message for browsers that don't support video */}
             Your browser does not support the video tag.
           </video>
@@ -101,7 +99,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-primary-foreground text-balance"
+            className="text-primary-foreground"
           >
             Train to Ignite the World with the{" "}
             <span className="text-accent">Gospel of Jesus Christ</span>
