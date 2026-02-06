@@ -23,6 +23,7 @@ export default {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
           dark: "hsl(var(--primary-dark))",
+          light: "hsl(var(--primary-light))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -85,10 +86,10 @@ export default {
         'lg': 'var(--shadow-lg)',
         'xl': 'var(--shadow-xl)',
         'glow': 'var(--shadow-glow)',
-        'gold': '0 10px 40px -10px rgba(212, 160, 23, 0.5)',
-        'gold-lg': '0 20px 50px -15px rgba(212, 160, 23, 0.6)',
-        'gold-sm': '0 4px 20px -5px rgba(212, 160, 23, 0.4)',
-        'navy': '0 10px 40px -10px rgba(21, 47, 93, 0.4)',
+        'gold': '0 10px 40px -10px rgba(246, 148, 0, 0.5)',
+        'gold-lg': '0 20px 50px -15px rgba(246, 148, 0, 0.6)',
+        'gold-sm': '0 4px 20px -5px rgba(246, 148, 0, 0.4)',
+        'navy': '0 10px 40px -10px rgba(1, 51, 154, 0.4)',
       },
       keyframes: {
         "accordion-down": {
@@ -144,8 +145,8 @@ export default {
           "50%": { transform: "translateY(-5px)" },
         },
         "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(212, 160, 23, 0.3)" },
-          "50%": { boxShadow: "0 0 40px rgba(212, 160, 23, 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(246, 148, 0, 0.3)" },
+          "50%": { boxShadow: "0 0 40px rgba(246, 148, 0, 0.6)" },
         },
       },
       animation: {

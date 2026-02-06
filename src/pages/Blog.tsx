@@ -1,107 +1,33 @@
 import { useState, useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Calendar, User, ArrowRight, Tag, Search } from "lucide-react";
+import { Calendar, User, ArrowRight, Tag, Search, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import headerBlogBg from "@/assets/header-blog.jpg";
+import { blogPosts as newBlogPosts } from "@/data/blogPosts";
+
 const categories = [
-  { id: "all", name: "All Posts", count: 12 },
-  { id: "events", name: "School Events", count: 5 },
-  { id: "spiritual", name: "Spiritual Insights", count: 4 },
-  { id: "alumni", name: "Alumni Updates", count: 3 },
+  { id: "all", name: "All Posts", count: 8 },
+  { id: "Spiritual Growth", name: "Spiritual Growth", count: 6 },
+  { id: "Spiritual Warfare", name: "Spiritual Warfare", count: 1 },
+  { id: "Family", name: "Family", count: 1 },
 ];
 
-const blogPosts = [
-  {
-    id: 1,
-    title: "2026 Session Begins: A New Generation of Firebrands",
-    excerpt: "The January 2026 session kicked off with over 200 new students from 15 different countries, ready to be equipped for ministry...",
-    content: "Full article content here...",
-    category: "events",
-    author: "DUSOM Admin",
-    date: "January 15, 2026",
-    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=400&fit=crop",
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "The Power of Consecration in Ministry",
-    excerpt: "Dr. Paul Enenche shares profound insights on the importance of consecration and how it determines the level of anointing in ministry...",
-    content: "Full article content here...",
-    category: "spiritual",
-    author: "Dr. Paul Enenche",
-    date: "January 10, 2026",
-    image: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=800&h=400&fit=crop",
-    featured: true,
-  },
-  {
-    id: 3,
-    title: "Alumni Spotlight: Pastor James in East Africa",
-    excerpt: "2019 graduate Pastor James Okonkwo shares his journey of planting 5 churches across Kenya and Uganda within 4 years...",
-    content: "Full article content here...",
-    category: "alumni",
-    author: "Alumni Relations",
-    date: "January 5, 2026",
-    image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=400&fit=crop",
-    featured: false,
-  },
-  {
-    id: 4,
-    title: "Graduation Ceremony: December 2025 Cohort",
-    excerpt: "Over 150 students graduated from the July-December 2025 session, commissioned to take the Gospel to the ends of the earth...",
-    content: "Full article content here...",
-    category: "events",
-    author: "DUSOM Admin",
-    date: "December 20, 2025",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=400&fit=crop",
-    featured: false,
-  },
-  {
-    id: 5,
-    title: "Understanding the Prophetic Ministry",
-    excerpt: "A deep dive into the prophetic ministry, its operations, and how believers can operate in this dimension of the Spirit...",
-    content: "Full article content here...",
-    category: "spiritual",
-    author: "Dr. Becky Paul-Enenche",
-    date: "December 15, 2025",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop",
-    featured: false,
-  },
-  {
-    id: 6,
-    title: "Annual Prayer Conference: Seek His Face 2025",
-    excerpt: "The annual prayer conference brought together students, alumni, and ministers for 3 days of intense intercession and spiritual renewal...",
-    content: "Full article content here...",
-    category: "events",
-    author: "DUSOM Admin",
-    date: "December 10, 2025",
-    image: "https://images.unsplash.com/photo-1478147427282-58a87a120781?w=800&h=400&fit=crop",
-    featured: false,
-  },
-  {
-    id: 7,
-    title: "Alumni Network Expands to 50+ Countries",
-    excerpt: "Our alumni network continues to grow with DUSOM graduates now serving in over 50 countries across all continents...",
-    content: "Full article content here...",
-    category: "alumni",
-    author: "Alumni Relations",
-    date: "December 5, 2025",
-    image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&h=400&fit=crop",
-    featured: false,
-  },
-  {
-    id: 8,
-    title: "The Secret of Effective Soul Winning",
-    excerpt: "Practical strategies for effective evangelism and soul winning that every minister should know and practice...",
-    content: "Full article content here...",
-    category: "spiritual",
-    author: "Dr. Paul Enenche",
-    date: "November 28, 2025",
-    image: "https://images.unsplash.com/photo-1490730141103-6cac27abb37f?w=800&h=400&fit=crop",
-    featured: false,
-  },
-];
+// Transform new blog posts to match the format expected by the component
+const blogPosts = newBlogPosts.map(post => ({
+  id: post.id,
+  title: post.title,
+  excerpt: post.excerpt,
+  content: post.content,
+  category: post.category,
+  author: post.author,
+  date: new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+  readTime: post.readTime,
+  image: post.featuredImage,
+  featured: post.id <= 2, // First 2 posts are featured
+  slug: post.slug,
+}));
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -204,7 +130,7 @@ const Blog = () => {
               DUSOM Blog
             </h1>
             <p className="text-xl text-white/80">
-              Stay updated with school events, spiritual insights, and inspiring alumni stories
+              Stay updated with school events, spiritual insights, and inspiring stories
             </p>
           </motion.div>
         </motion.div>
@@ -270,7 +196,7 @@ const Blog = () => {
                     {post.excerpt}
                   </p>
                   <Link
-                    to={`/blog/${post.id}`}
+                    to={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all"
                   >
                     Read More <ArrowRight className="w-4 h-4" />
@@ -404,8 +330,8 @@ const Blog = () => {
                           {post.date}
                         </span>
                         <span className="flex items-center gap-1">
-                          <User className="w-3 h-3" />
-                          {post.author}
+                          <Clock className="w-3 h-3" />
+                          {post.readTime}
                         </span>
                       </div>
                       <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
@@ -415,7 +341,7 @@ const Blog = () => {
                         {post.excerpt}
                       </p>
                       <Link
-                        to={`/blog/${post.id}`}
+                        to={`/blog/${post.slug}`}
                         className="inline-flex items-center gap-2 text-primary text-sm font-semibold hover:gap-3 transition-all"
                       >
                         Read More <ArrowRight className="w-4 h-4" />

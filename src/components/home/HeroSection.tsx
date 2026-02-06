@@ -44,13 +44,13 @@ export function HeroSection() {
     <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Video Background */}
       <div className="absolute inset-0">
-        {/* Poster image shown while video loads */}
+        {/* Static background image - always visible as fallback */}
         <div 
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${isVideoLoaded ? 'opacity-0' : 'opacity-100'}`}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroBg})` }}
         />
         
-        {/* Video - lazy loaded with optimized settings */}
+        {/* Video - lazy loaded with optimized settings, overlays the image */}
         {shouldLoadVideo && (
           <video
             ref={videoRef}
@@ -64,6 +64,8 @@ export function HeroSection() {
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
           >
             <source src={heroVideo} type="video/mp4" />
+            {/* Fallback message for browsers that don't support video */}
+            Your browser does not support the video tag.
           </video>
         )}
         

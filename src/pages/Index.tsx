@@ -3,7 +3,8 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { AnimatedCounter } from "@/components/home/AnimatedCounter";
 import { ValueProposition } from "@/components/home/ValueProposition";
 import { FeaturedCourses } from "@/components/home/FeaturedCourses";
-import { TestimonialsCarousel } from "@/components/home/TestimonialsCarousel";
+import { TestimonialsPreview } from "@/components/home/TestimonialsPreview";
+import { GalleryPreview } from "@/components/home/GalleryPreview";
 import { CTASection } from "@/components/home/CTASection";
 
 const stats = [
@@ -37,7 +38,8 @@ const Index = () => {
       <AnimatedCounter items={stats} />
       <ValueProposition />
       <FeaturedCourses />
-      <TestimonialsCarousel />
+      <TestimonialsPreview />
+      <GalleryPreview />
       <CTASection />
     </Layout>
   );

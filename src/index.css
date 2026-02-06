@@ -4,17 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* DUSOM Brand Design System - Colors based on Logo (Navy Blue + Gold) */
+/* DUSOM Brand Design System - Colors based on Official Brand Guide */
 @layer base {
   :root {
-    /* Primary Brand Colors - Deep Navy Blue from Logo */
-    --primary: 215 70% 28%;           /* Deep Navy Blue (graduation cap) */
+    /* Primary Brand Colors - Official Blue */
+    --primary: 220 99% 30%;           /* #01339A - Primary Blue */
     --primary-foreground: 0 0% 100%;  /* White */
-    --primary-dark: 215 85% 18%;      /* Darker Navy */
+    --primary-dark: 220 99% 20%;      /* Darker Blue */
+    --primary-light: 235 73% 64%;     /* #636FE2 - Secondary Blue */
     
-    /* Accent Colors - Gold/Orange from Logo */
-    --accent-gold: 42 85% 50%;        /* Gold (globe/flame) */
-    --accent-orange: 32 95% 55%;      /* Orange (flame accents) */
+    /* Accent Colors - Official Orange/Red */
+    --accent-gold: 34 100% 48%;       /* #F69400 - Orange */
+    --accent-orange: 14 92% 42%;      /* #CE3708 - Red/Orange */
     --accent-green: 142 45% 45%;      /* Growth Green */
     --accent-teal: 194 75% 50%;       /* Teal accent */
     
@@ -35,30 +36,30 @@
     --muted: 40 15% 94%;
     --muted-foreground: 0 0% 40%;     /* #666666 */
     
-    /* Accent (using Gold) */
-    --accent: 42 85% 50%;
+    /* Accent (using Official Orange) */
+    --accent: 34 100% 48%;
     --accent-foreground: 0 0% 100%;
     
     /* States */
-    --destructive: 0 84% 60%;
+    --destructive: 14 92% 42%;
     --destructive-foreground: 0 0% 100%;
     
     --success: 142 45% 45%;
     --success-foreground: 0 0% 100%;
     
     /* Borders & Inputs */
-    --border: 40 10% 88%;             /* Warm border */
-    --input: 40 10% 85%;
-    --ring: 42 85% 50%;               /* Gold ring */
+    --border: 220 20% 88%;            /* Blue-tinted border */
+    --input: 220 20% 85%;
+    --ring: 34 100% 48%;              /* Orange ring */
     
     --radius: 0.5rem;
     
-    /* Gradients with Navy + Gold theme */
-    --gradient-primary: linear-gradient(135deg, hsl(215 70% 28%) 0%, hsl(215 85% 18%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(215 70% 28%) 0%, hsl(215 85% 18%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(42 85% 50%) 0%, hsl(32 95% 55%) 100%);
+    /* Gradients with Official Brand Colors */
+    --gradient-primary: linear-gradient(135deg, hsl(220 99% 30%) 0%, hsl(220 99% 20%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(220 99% 30%) 0%, hsl(235 73% 64%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(34 100% 48%) 0%, hsl(14 92% 42%) 100%);
     --gradient-green: linear-gradient(135deg, hsl(142 45% 45%) 0%, hsl(142 50% 35%) 100%);
-    --gradient-mixed: linear-gradient(135deg, hsl(215 70% 28%) 0%, hsl(42 85% 50%) 100%);
+    --gradient-mixed: linear-gradient(135deg, hsl(220 99% 30%) 0%, hsl(34 100% 48%) 100%);
     
     /* Shadows */
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -66,38 +67,38 @@
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --shadow-glow: 0 0 30px rgba(212, 160, 23, 0.3);
+    --shadow-glow: 0 0 30px rgba(246, 148, 0, 0.3);
     
-    /* Sidebar - Navy theme */
-    --sidebar-background: 215 85% 18%;
+    /* Sidebar - Official Blue theme */
+    --sidebar-background: 220 99% 20%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 42 85% 50%;
+    --sidebar-primary: 34 100% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 42 85% 50%;
-    --sidebar-accent-foreground: 215 85% 18%;
-    --sidebar-border: 215 60% 30%;
-    --sidebar-ring: 42 85% 50%;
+    --sidebar-accent: 34 100% 48%;
+    --sidebar-accent-foreground: 220 99% 20%;
+    --sidebar-border: 220 60% 30%;
+    --sidebar-ring: 34 100% 48%;
   }
 
   .dark {
-    --background: 215 50% 8%;
+    --background: 220 50% 8%;
     --foreground: 40 20% 98%;
-    --card: 215 50% 12%;
+    --card: 220 50% 12%;
     --card-foreground: 40 20% 98%;
-    --popover: 215 50% 12%;
+    --popover: 220 50% 12%;
     --popover-foreground: 40 20% 98%;
-    --primary: 42 85% 55%;
-    --primary-foreground: 215 85% 12%;
-    --secondary: 215 40% 18%;
+    --primary: 235 73% 64%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 40% 18%;
     --secondary-foreground: 40 20% 98%;
-    --muted: 215 40% 18%;
+    --muted: 220 40% 18%;
     --muted-foreground: 40 20% 70%;
-    --accent: 42 85% 55%;
+    --accent: 34 100% 48%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 62% 40%;
+    --destructive: 14 92% 42%;
     --destructive-foreground: 0 0% 100%;
-    --border: 215 40% 22%;
-    --input: 215 40% 25%;
+    --border: 220 40% 22%;
+    --input: 220 40% 25%;
     --ring: 42 85% 55%;
   }
 }

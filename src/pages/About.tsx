@@ -115,16 +115,35 @@ const About = () => {
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <div className="container-content relative z-10">
+          {/* History/Preamble */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-secondary/50 rounded-2xl p-8 mb-8"
+          >
+            <h3 className="text-primary mb-4">Brief History</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              DUNAMIS School of Ministry (DUSOM) was established in January 2000 through God's Servant, 
+              the Senior Pastor, Dr. Pastor Paul Enenche. The school exists to teach the word of God 
+              through which the impartation of the unction that is at work on DUNAMIS is transmitted 
+              through the various topics being taught in the school. The program is designed to prepare 
+              students from all Bible-believing churches across the globe to function effectively in any 
+              ministerial role such as Church workers, home Church leaders, evangelists, Altar Ministers, 
+              and pastoral calling.
+            </p>
+          </motion.div>
+
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
                 title: "Our Vision",
-                content: "To raise an army of Spirit-filled, Word-equipped, and character-refined ministers who will ignite revival fires across nations.",
+                content: "DUNAMIS School of Ministry, where servants are trained engulfed with fire to saturate the world. Raising fire men for fire Gospel spread with tongues of fire, inflaming the world like a volcano, we are firebrands. With the voice of thunder, we advance. With wings on our feet, like burning fiery missiles authorized to turn the world to God. Hebrews 1:7; Psalm 104:4.",
                 color: "primary"
               },
               {
                 title: "Our Mission",
-                content: "To train believers in the knowledge of God's Word, equip them with practical ministry skills, and impart the fire of the Holy Spirit for effective service.",
+                content: "Spread the Gospel through all the earth as the waters cover the sea. Spreading His Glory through all the earth as the waters cover the sea. Habakkuk 2:14.",
                 color: "accent-gold"
               }
             ].map((item, index) => (

@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Testimony video files (too large for GitHub)
+testimonies/*.mp4
+testimonies/*.mp3
+testimonies_transcriptions/
+testimonies_snippets/

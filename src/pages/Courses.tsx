@@ -6,31 +6,31 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Users, Award, Lightbulb, Heart, Globe } from "lucide-react";
 import headerCoursesBg from "@/assets/header-courses.jpg";
 const firstSemesterCourses = [
-  { id: 1, title: "Understanding the Bible", description: "Deep dive into biblical interpretation, hermeneutics, and proper study methods for effective ministry." },
-  { id: 2, title: "Purpose, Vision & Divine Direction", description: "Discover God's specific plan for your life and learn to walk in your divine assignment." },
-  { id: 3, title: "Faith Principles", description: "Master the principles of faith that activate God's power and provision in ministry." },
-  { id: 4, title: "Prayer & Intercession", description: "Develop a powerful prayer life and learn the art of effective intercession." },
-  { id: 5, title: "Church History & Doctrine", description: "Understand the foundations of Christian faith through historical and doctrinal study." },
-  { id: 6, title: "Biblical Leadership", description: "Learn kingdom principles of leadership that transform ministries and communities." },
-  { id: 7, title: "Spiritual Warfare", description: "Understand and engage in spiritual battles with biblical strategies and authority." },
-  { id: 8, title: "Discipleship & Mentoring", description: "Learn to effectively disciple believers and raise future leaders." },
-  { id: 9, title: "Gospel & Evangelism", description: "Master the art of sharing the Gospel effectively in various contexts." },
-  { id: 10, title: "Ministry Ethics & Character", description: "Build the character foundation essential for lasting ministry impact." },
-  { id: 11, title: "Prophetic Ministry & Gifts", description: "Understand and operate in the gifts of the Spirit with biblical accuracy." },
+  { id: 1, title: "Use of English", description: "Develop effective communication skills for ministry and professional contexts." },
+  { id: 2, title: "Financial Overflow", description: "Biblical principles for financial prosperity and management in ministry." },
+  { id: 3, title: "Understanding the Bible", description: "Deep dive into biblical interpretation, hermeneutics, and proper study methods." },
+  { id: 4, title: "Purpose, Vision & Divine Direction", description: "Discover God's specific plan for your life and walk in your divine assignment." },
+  { id: 5, title: "Faith Principles", description: "Master the principles of faith that activate God's power and provision." },
+  { id: 6, title: "Ministry, Minister & Message", description: "Understanding the calling, character, and communication of a minister." },
+  { id: 7, title: "Servanthood, Fatherhood and Mentoring", description: "Learn the dynamics of serving, fathering, and mentoring others in ministry." },
+  { id: 8, title: "Leadership and People's Management", description: "Kingdom principles of leadership that transform ministries and communities." },
+  { id: 9, title: "Anointing Secrets & Essentials", description: "Discover the secrets of operating in the anointing for effective ministry." },
+  { id: 10, title: "Gift, Calling & Ministry", description: "Understand your spiritual gifts and calling for effective service." },
+  { id: 11, title: "Church Growth & Administration", description: "Learn principles for growing and administrating a thriving church." },
 ];
 
 const secondSemesterCourses = [
-  { id: 12, title: "Advanced Biblical Studies", description: "Deeper exploration of biblical texts with advanced interpretive methods." },
-  { id: 13, title: "Apostolic Ministry & Vision", description: "Understand apostolic ministry and pioneering work in the kingdom." },
-  { id: 14, title: "Worship & Praise", description: "Learn the theology and practice of worship that honors God." },
-  { id: 15, title: "Preaching & Communication", description: "Master the art of effective preaching and public speaking." },
-  { id: 16, title: "Pastoral Care & Counseling", description: "Develop skills in caring for God's people and providing godly counsel." },
-  { id: 17, title: "Administration & Church Management", description: "Learn effective church administration and organizational leadership." },
-  { id: 18, title: "Finance & Stewardship", description: "Biblical principles of financial management for ministry success." },
-  { id: 19, title: "Global Missions & Outreach", description: "Prepare for cross-cultural ministry and global mission work." },
-  { id: 20, title: "Youth & Young Adult Ministry", description: "Specialized training for reaching and discipling the next generation." },
-  { id: 21, title: "Media & Digital Ministry", description: "Leverage modern technology for effective Gospel communication." },
-  { id: 22, title: "Ministry Practicum & Capstone", description: "Apply all learning in a hands-on ministry project and presentation." },
+  { id: 12, title: "Family Wisdom", description: "Biblical principles for building and maintaining godly family relationships." },
+  { id: 13, title: "Thou Art My Battle Axe", description: "Understanding your role as God's instrument for kingdom advancement." },
+  { id: 14, title: "Go In This Thy Might", description: "Operating in the power and authority given to every believer." },
+  { id: 15, title: "Secrets of Jesus' Ministry and the Acts of the Apostles", description: "Learning from the ministry patterns of Jesus and the early church." },
+  { id: 16, title: "Dynamics of Praise & Worship", description: "The theology and practice of worship that honors God." },
+  { id: 17, title: "Evangelism & Discipleship", description: "Master the art of soul winning and making disciples." },
+  { id: 18, title: "Principles & Powers of Prayer", description: "Develop a powerful prayer life and effective intercession." },
+  { id: 19, title: "Character and Principles of Integrity", description: "Build the character foundation essential for lasting ministry impact." },
+  { id: 20, title: "Making Full Proof of Ministry", description: "Maximizing your effectiveness and fulfilling your ministry calling." },
+  { id: 21, title: "Excellence In Life and Ministry", description: "Pursuing and maintaining excellence in all areas of life and service." },
+  { id: 22, title: "Holy Ghost & The End-Time Move of God", description: "Understanding the Holy Spirit's role in the last days." },
 ];
 
 const features = [

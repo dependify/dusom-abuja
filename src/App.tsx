@@ -8,9 +8,13 @@ import About from "./pages/About";
 import Courses from "./pages/Courses";
 import Admissions from "./pages/Admissions";
 import StudentLife from "./pages/StudentLife";
+import Testimonies from "./pages/Testimonies";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Apply from "./pages/Apply";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
 import AdminAuth from "./pages/admin/AdminAuth";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -41,8 +45,12 @@ const App = () => (
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/apply" element={<Apply />} />
           <Route path="/student-life" element={<StudentLife />} />
+          <Route path="/testimonies" element={<Testimonies />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
           
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminAuth />} />
