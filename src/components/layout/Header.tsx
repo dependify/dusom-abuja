@@ -12,6 +12,7 @@ const navItems = [
   { label: "Courses", href: "/courses" },
   { label: "Admissions", href: "/admissions" },
   { label: "Student Life", href: "/student-life" },
+  { label: "Alumni", href: "/alumni" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];

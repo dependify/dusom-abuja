@@ -17,6 +17,36 @@ const values = [
   { icon: Globe, title: "Global Network", description: "Join 10,000+ alumni making impact across the world" },
 ];
 
+const studyFocus = [
+  "Raising Firemen like missiles to compel the obedience of their generation",
+  "Providing skilled labor for the end-time harvest",
+  "Training men to gather their destinies and effectively fulfill God's purpose",
+  "Providing help for God's servants to run their God-given assignment with excellence and integrity"
+];
+
+const administrativeStructure = [
+  {
+    title: "Director of DUNAMIS School of Ministry",
+    description: "The spiritual and administrative head of DUSOM Worldwide. Gives directives and instructions on spiritual, academic, administrative, and financial policies."
+  },
+  {
+    title: "Director of Administration",
+    description: "Approves and signs the quarterly budget. The Coordinating Pastor reports directly to the Administrator."
+  },
+  {
+    title: "Coordinating Pastor",
+    description: "Coordinates all activities of the school, lecturers, students' compliance, paid and voluntary staff. Ensures the vision and mission are followed."
+  },
+  {
+    title: "Assistant Coordinating Pastor",
+    description: "Assists the Coordinating Pastor in all duties and steps in during their absence."
+  },
+  {
+    title: "Secretary",
+    description: "Administrative support for the smooth running of school operations."
+  }
+];
+
 const timeline = [
   { year: "2000", title: "Foundation", description: "DUSOM was established under the vision of Dr. Paul Enenche" },
   { year: "2010", title: "Growth", description: "Expanded to serve students from over 20 countries" },
@@ -165,8 +195,48 @@ const About = () => {
         </div>
       </section>
 
-      {/* Timeline */}
+      {/* Study Focus */}
       <section className="section-padding bg-secondary/30 relative overflow-hidden">
+        <motion.div
+          className="absolute -bottom-20 -left-20 w-60 h-60 bg-accent-gold/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.3, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="container-content relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-foreground mb-4">Study Focus</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              The core objectives that drive our training and formation
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {studyFocus.map((focus, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="flex gap-4 items-start p-6 bg-background rounded-xl shadow-sm"
+              >
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-accent-gold/10 flex items-center justify-center">
+                  <Flame className="h-5 w-5 text-accent-gold" />
+                </div>
+                <p className="text-foreground leading-relaxed">{focus}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="section-padding bg-background relative overflow-hidden">
         <motion.div
           className="absolute -bottom-20 -left-20 w-60 h-60 bg-accent-gold/10 rounded-full blur-3xl"
           animate={{ scale: [1, 1.3, 1] }}
@@ -258,6 +328,62 @@ const About = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Administrative Structure */}
+      <section className="section-padding bg-secondary/30 relative overflow-hidden">
+        <motion.div
+          className="absolute -top-20 -right-20 w-60 h-60 bg-primary/5 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="container-content relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-foreground mb-4">Administrative Structure</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              The organizational hierarchy that ensures effective management of DUSOM
+            </p>
+          </motion.div>
+
+          <div className="max-w-4xl mx-auto space-y-4">
+            {administrativeStructure.map((role, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-background rounded-xl p-6 shadow-sm border-l-4 border-primary"
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
+                    {index + 1}
+                  </span>
+                  <h4 className="text-foreground">{role.title}</h4>
+                </div>
+                <p className="text-muted-foreground pl-11">{role.description}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-8 p-6 bg-primary/5 rounded-2xl max-w-4xl mx-auto"
+          >
+            <p className="text-muted-foreground text-sm">
+              <strong>Note:</strong> All lecturers are drawn from the pastorate of DUNAMIS International 
+              Gospel Centre, having served as pastors for not less than five years. They are seasoned 
+              ministers in full agreement with the Statement of Faith and doctrinal beliefs of the Commission.
+            </p>
+          </motion.div>
         </div>
       </section>
 

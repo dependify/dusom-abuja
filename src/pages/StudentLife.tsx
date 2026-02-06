@@ -3,9 +3,22 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Flame, Users, Target, Heart, Globe, GraduationCap, ArrowRight } from "lucide-react";
+import { Flame, Users, Target, Heart, Globe, GraduationCap, ArrowRight, BookOpen, Monitor } from "lucide-react";
 import { PhotoGallery } from "@/components/student-life/PhotoGallery";
 import headerStudentLifeBg from "@/assets/header-student-life.jpg";
+
+const facilities = [
+  {
+    icon: BookOpen,
+    title: "DUSOM Library",
+    description: "A well-stocked library with biblical resources, reference materials, and study spaces for students to enhance their learning experience."
+  },
+  {
+    icon: Monitor,
+    title: "DUSOM Media/IT Support",
+    description: "Modern multimedia facilities and IT support to aid in presentations, research, and accessing digital learning resources."
+  }
+];
 const features = [
   { icon: Flame, title: "Spiritual Impartation", description: "Direct teaching from Dr. Paul & Dr. Becky Enenche" },
   { icon: Target, title: "Practical Training", description: "Real-world ministry experience" },
@@ -76,6 +89,42 @@ const StudentLife = () => {
             ))}
           </div>
         </motion.div>
+      </section>
+
+      {/* Facilities */}
+      <section className="section-padding bg-secondary/30 relative overflow-hidden">
+        <div className="container-content relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-foreground mb-4">Our Facilities</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Resources to support your learning and spiritual growth
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {facilities.map((facility, index) => (
+              <motion.div
+                key={facility.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="bg-background rounded-2xl p-8 shadow-sm hover:shadow-md transition-all group"
+              >
+                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                  <facility.icon className="h-8 w-8 text-primary group-hover:text-primary-foreground transition-colors" />
+                </div>
+                <h3 className="text-foreground mb-4">{facility.title}</h3>
+                <p className="text-muted-foreground">{facility.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <PhotoGallery />

@@ -8,6 +8,8 @@ import About from "./pages/About";
 import Courses from "./pages/Courses";
 import Admissions from "./pages/Admissions";
 import StudentLife from "./pages/StudentLife";
+import StudentAffairs from "./pages/StudentAffairs";
+import Alumni from "./pages/Alumni";
 import Testimonies from "./pages/Testimonies";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
@@ -45,6 +47,8 @@ const App = () => (
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/apply" element={<Apply />} />
           <Route path="/student-life" element={<StudentLife />} />
+          <Route path="/student-affairs" element={<StudentAffairs />} />
+          <Route path="/alumni" element={<Alumni />} />
           <Route path="/testimonies" element={<Testimonies />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />

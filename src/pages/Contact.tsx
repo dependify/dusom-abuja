@@ -9,10 +9,22 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import headerContactBg from "@/assets/header-contact.jpg";
 const contactInfo = [
-  { icon: Phone, label: "Phone", value: "+234 (801) 234-5678", href: "tel:+2348012345678" },
-  { icon: Mail, label: "Email", value: "admissions@dusomabuja.org", href: "mailto:admissions@dusomabuja.org" },
-  { icon: MapPin, label: "Address", value: "Airport Road, Area 1, Abuja, Nigeria", href: "#" },
+  { icon: Phone, label: "Phone", value: "+234 808 327 5342", href: "tel:+2348083275342" },
+  { icon: Mail, label: "Email", value: "dusomabuja@gmail.com", href: "mailto:dusomabuja@gmail.com" },
+  { icon: MapPin, label: "Address", value: "Dunamis International Gospel Centre, Area 1, Behind Old Federal Secretariat, Abuja, Nigeria", href: "#" },
   { icon: Clock, label: "Hours", value: "Mon - Fri: 9AM - 5PM WAT", href: "#" },
+];
+
+const additionalEmails = [
+  "dusomexamsabuja@gmail.com",
+  "dunamisschoolofministryabuja@gmail.com"
+];
+
+const socialLinks = [
+  { name: "Facebook", url: "https://facebook.com/DUNAMIS SCHOOL OF MINISTRY HQ, ABUJA" },
+  { name: "Instagram", url: "https://instagram.com/@DusomAbuja" },
+  { name: "Twitter", url: "https://twitter.com/@DusomAbuja" },
+  { name: "YouTube", url: "https://youtube.com/@DusomAbuja" },
 ];
 
 const Contact = () => {
@@ -113,6 +125,34 @@ const Contact = () => {
                     </div>
                   </a>
                 ))}
+              </div>
+              
+              <div className="pt-6 border-t border-border">
+                <p className="text-sm text-muted-foreground mb-3">Additional Email Addresses</p>
+                <div className="space-y-2">
+                  {additionalEmails.map((email) => (
+                    <a key={email} href={`mailto:${email}`} className="block text-sm text-primary hover:underline">
+                      {email}
+                    </a>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="pt-6 border-t border-border">
+                <p className="text-sm text-muted-foreground mb-3">Follow Us</p>
+                <div className="flex flex-wrap gap-3">
+                  {socialLinks.map((social) => (
+                    <a 
+                      key={social.name}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 rounded-full bg-primary/10 text-sm text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                    >
+                      {social.name}
+                    </a>
+                  ))}
+                </div>
               </div>
             </motion.div>
 

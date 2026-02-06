@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRef, useState, useEffect } from "react";
-import heroVideo from "@/assets/hero-video.mp4";
+import heroVideoDesktop from "@/assets/hero-video-desktop.mp4";
+import heroVideoMobile from "@/assets/hero-video-mobile.mp4";
 import heroBg from "@/assets/hero-bg.jpg";
 
 export function HeroSection() {
@@ -63,7 +64,10 @@ export function HeroSection() {
             onLoadedData={handleVideoLoaded}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
           >
-            <source src={heroVideo} type="video/mp4" />
+            {/* Desktop video - higher quality */}
+            <source src={heroVideoDesktop} type="video/mp4" media="(min-width: 768px)" />
+            {/* Mobile video - optimized for smaller screens */}
+            <source src={heroVideoMobile} type="video/mp4" />
             {/* Fallback message for browsers that don't support video */}
             Your browser does not support the video tag.
           </video>

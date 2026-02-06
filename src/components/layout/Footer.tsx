@@ -12,6 +12,7 @@ const quickLinks = [
   { label: "Courses", href: "/courses" },
   { label: "Admissions", href: "/admissions" },
   { label: "Student Life", href: "/student-life" },
+  { label: "Alumni", href: "/alumni" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
@@ -141,6 +142,17 @@ export function Footer() {
         <div className="mt-16 pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-primary-foreground/50 text-xs">
             © {new Date().getFullYear()} Dunamis School of Ministry. All rights reserved.
+          </p>
+          <p className="text-primary-foreground/50 text-xs">
+            Designed by{" "}
+            <a 
+              href="https://dependifyllc.com.ng" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-accent-gold hover:text-accent-orange transition-colors"
+            >
+              Dependify LLC
+            </a>
           </p>
           <div className="flex gap-6">
             <Link 
