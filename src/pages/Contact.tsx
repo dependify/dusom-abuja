@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,6 +9,7 @@ import { Mail, Phone, MapPin, Clock, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import headerContactBg from "@/assets/header-contact.jpg";
+import { pageSEO, generateLocalBusinessSchema, generateBreadcrumbSchema } from "@/lib/seo";
 const contactInfo = [
   { icon: Phone, label: "Phone", value: "+234 808 327 5342", href: "tel:+2348083275342" },
   { icon: Mail, label: "Email", value: "dusomabuja@gmail.com", href: "mailto:dusomabuja@gmail.com" },
@@ -28,6 +30,15 @@ const socialLinks = [
 ];
 
 const Contact = () => {
+  const seo = pageSEO.contact;
+  const schemas = [
+    generateLocalBusinessSchema(),
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Contact", url: "/contact" }
+    ])
+  ];
+
   const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", phone: "", message: "" });
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -82,6 +93,7 @@ const Contact = () => {
 
   return (
     <Layout>
+      <PageSEO {...seo} schemas={schemas} />
       <section ref={heroRef} className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}
         <motion.div 

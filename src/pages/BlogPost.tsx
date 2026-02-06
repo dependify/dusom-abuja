@@ -1,11 +1,12 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { getBlogPostBySlug, BlogPost } from "@/data/blogPosts";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, User, Clock, Share2, Facebook, Twitter, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SEOHead } from "@/components/SEOHead";
 import { useEffect } from "react";
+import { generateArticleSchema, generateBreadcrumbSchema, BASE_URL } from "@/lib/seo";
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -41,13 +42,36 @@ const BlogPostPage = () => {
     }
   };
 
+  const seo = {
+    title: post.title,
+    description: post.excerpt,
+    ogType: "article" as const,
+    ogImage: post.featuredImage,
+    publishedTime: post.date,
+    author: post.author,
+    tags: post.tags
+  };
+
+  const schemas = [
+    generateArticleSchema({
+      title: post.title,
+      description: post.excerpt,
+      url: `${BASE_URL}/blog/${post.slug}`,
+      image: `${BASE_URL}${post.featuredImage}`,
+      publishedTime: post.date,
+      author: post.author,
+      tags: post.tags
+    }),
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Blog", url: "/blog" },
+      { name: post.title, url: `/blog/${post.slug}` }
+    ])
+  ];
+
   return (
     <Layout>
-      <SEOHead
-        title={post.title}
-        description={post.excerpt}
-        image={post.featuredImage}
-      />
+      <PageSEO {...seo} schemas={schemas} />
       
       {/* Hero Section */}
       <section className="relative bg-primary py-20 md:py-28">

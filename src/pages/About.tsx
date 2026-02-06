@@ -2,12 +2,14 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { 
   GraduationCap, Users, Target, Heart, Globe, Flame,
   ArrowRight
 } from "lucide-react";
 import headerAboutBg from "@/assets/header-about.jpg";
+import { pageSEO, generateOrganizationSchema, generateBreadcrumbSchema } from "@/lib/seo";
 const values = [
   { icon: Flame, title: "Spiritual Impartation", description: "Direct spiritual transfer from seasoned ministers with decades of experience" },
   { icon: Target, title: "Practical Training", description: "Real-world ministry experience integrated throughout your learning journey" },
@@ -77,8 +79,18 @@ const About = () => {
   });
   const leadershipY = useTransform(leadershipProgress, [0, 1], ["10%", "-10%"]);
 
+  const seo = pageSEO.about;
+  const schemas = [
+    generateOrganizationSchema(),
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "About", url: "/about" }
+    ])
+  ];
+
   return (
     <Layout>
+      <PageSEO {...seo} schemas={schemas} />
       {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}

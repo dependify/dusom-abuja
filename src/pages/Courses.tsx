@@ -2,9 +2,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Users, Award, Lightbulb, Heart, Globe } from "lucide-react";
 import headerCoursesBg from "@/assets/header-courses.jpg";
+import { pageSEO, generateCourseSchema, generateBreadcrumbSchema, generateFAQSchema } from "@/lib/seo";
 const firstSemesterCourses = [
   { id: 1, title: "Use of English", description: "Develop effective communication skills for ministry and professional contexts." },
   { id: 2, title: "Financial Overflow", description: "Biblical principles for financial prosperity and management in ministry." },
@@ -49,6 +51,25 @@ const gradientVariants = [
   "course-card-mixed",
 ];
 
+const courseFAQs = [
+  {
+    question: "How many courses are offered at DUSOM?",
+    answer: "DUSOM offers 22 comprehensive courses across two semesters (11 per semester). First semester focuses on foundation and spiritual growth; second semester covers advanced ministry and specialization."
+  },
+  {
+    question: "What courses are taught in the first semester at DUSOM?",
+    answer: "First semester courses include: Use of English, Financial Overflow, Understanding the Bible, Purpose Vision & Divine Direction, Faith Principles, Ministry Minister & Message, Servanthood Fatherhood and Mentoring, Leadership and People's Management, Anointing Secrets & Essentials, Gift Calling & Ministry, and Church Growth & Administration."
+  },
+  {
+    question: "What courses are taught in the second semester at DUSOM?",
+    answer: "Second semester courses include: Family Wisdom, Thou Art My Battle Axe, Go In This Thy Might, Secrets of Jesus' Ministry, Dynamics of Praise & Worship, Evangelism & Discipleship, Principles & Powers of Prayer, Character and Principles of Integrity, Making Full Proof of Ministry, Excellence In Life and Ministry, and Holy Ghost & The End-Time Move of God."
+  },
+  {
+    question: "Are DUSOM courses taught by qualified instructors?",
+    answer: "Yes, all courses are taught by seasoned ministers who have been pastors with Dunamis International Gospel Centre for not less than five years. Dr. Paul Enenche and Dr. Becky Paul-Enenche also directly lecture and impart students."
+  }
+];
+
 const Courses = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroProgress } = useScroll({
@@ -72,8 +93,19 @@ const Courses = () => {
   });
   const featuresY = useTransform(featuresProgress, [0, 1], ["5%", "-5%"]);
 
+  const seo = pageSEO.courses;
+  const schemas = [
+    generateCourseSchema(),
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Courses", url: "/courses" }
+    ]),
+    generateFAQSchema(courseFAQs)
+  ];
+
   return (
     <Layout>
+      <PageSEO {...seo} schemas={schemas} />
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}

@@ -2,10 +2,12 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Flame, Users, Target, Heart, Globe, GraduationCap, ArrowRight, BookOpen, Monitor } from "lucide-react";
 import { PhotoGallery } from "@/components/student-life/PhotoGallery";
 import headerStudentLifeBg from "@/assets/header-student-life.jpg";
+import { pageSEO, generateBreadcrumbSchema } from "@/lib/seo";
 
 const facilities = [
   {
@@ -29,6 +31,14 @@ const features = [
 ];
 
 const StudentLife = () => {
+  const seo = pageSEO.studentLife;
+  const schemas = [
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Student Life", url: "/student-life" }
+    ])
+  ];
+
   const heroRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
 
@@ -48,6 +58,7 @@ const StudentLife = () => {
 
   return (
     <Layout>
+      <PageSEO {...seo} schemas={schemas} />
       <section ref={heroRef} className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}
         <motion.div 

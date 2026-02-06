@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { Button } from "@/components/ui/button";
 import { 
   Users, 
@@ -16,6 +17,7 @@ import {
   Trophy
 } from "lucide-react";
 import headerAboutBg from "@/assets/header-about.jpg";
+import { pageSEO, generateBreadcrumbSchema, generateOrganizationSchema } from "@/lib/seo";
 
 const alumniBenefits = [
   {
@@ -83,6 +85,15 @@ const dArcInfo = {
 };
 
 const Alumni = () => {
+  const seo = pageSEO.alumni;
+  const schemas = [
+    generateOrganizationSchema(),
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Alumni", url: "/alumni" }
+    ])
+  ];
+
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
@@ -93,6 +104,7 @@ const Alumni = () => {
 
   return (
     <Layout>
+      <PageSEO {...seo} schemas={schemas} />
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
         <motion.div 

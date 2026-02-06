@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { 
   BookOpen, 
   DollarSign, 
@@ -21,6 +22,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import headerAboutBg from "@/assets/header-about.jpg";
+import { pageSEO, generateBreadcrumbSchema, generateFAQSchema } from "@/lib/seo";
 
 const codeOfConduct = [
   "Students must commit to the duration of the school calendar. Admission will be revoked if a student abandons school activities.",
@@ -111,7 +113,31 @@ const foreignStudentInfo = [
   "Early application is recommended to allow time for travel arrangements."
 ];
 
+const codeOfConductFAQs = [
+  {
+    question: "What is the dress code at DUSOM?",
+    answer: "For brothers: smart shirt, tie, and neatly ironed trousers with or without suit. For sisters: smart shirt or gown under the knee (must cover the knee), not tight, not short, and no sleeveless."
+  },
+  {
+    question: "What happens if I'm consistently late to DUSOM classes?",
+    answer: "Consistent late coming attracts suspension from school. Any student under discipline shall be compelled to repeat the courses missed during the suspension period."
+  },
+  {
+    question: "Can I use my phone during DUSOM classes?",
+    answer: "Answering or making phone calls during class sessions is considered a gross offense. Offenders shall be severely disciplined and may forfeit the usage of the phone for the rest of the day."
+  }
+];
+
 const StudentAffairs = () => {
+  const seo = pageSEO.studentAffairs;
+  const schemas = [
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Student Affairs", url: "/student-affairs" }
+    ]),
+    generateFAQSchema(codeOfConductFAQs)
+  ];
+
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
@@ -122,6 +148,7 @@ const StudentAffairs = () => {
 
   return (
     <Layout>
+      <PageSEO {...seo} schemas={schemas} />
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
         <motion.div 

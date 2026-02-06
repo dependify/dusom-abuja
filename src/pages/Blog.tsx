@@ -1,11 +1,13 @@
 import { useState, useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Calendar, User, ArrowRight, Tag, Search, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import headerBlogBg from "@/assets/header-blog.jpg";
 import { blogPosts as newBlogPosts } from "@/data/blogPosts";
+import { pageSEO, generateBreadcrumbSchema } from "@/lib/seo";
 
 const categories = [
   { id: "all", name: "All Posts", count: 8 },
@@ -43,6 +45,14 @@ const itemVariants = {
 };
 
 const Blog = () => {
+  const seo = pageSEO.blog;
+  const schemas = [
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Blog", url: "/blog" }
+    ])
+  ];
+
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -72,6 +82,7 @@ const Blog = () => {
 
   return (
     <Layout>
+      <PageSEO {...seo} schemas={schemas} />
       {/* Hero Section */}
       <section ref={heroRef} className="relative py-24 overflow-hidden">
         {/* Background Image with Parallax */}

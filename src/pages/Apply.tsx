@@ -1,20 +1,27 @@
 import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { PageSEO } from "@/components/PageSEO";
 import { AdmissionForm } from "@/components/admissions/AdmissionForm";
 import { motion } from "framer-motion";
 import headerImage from "@/assets/header-admissions.jpg";
+import { pageSEO, generateBreadcrumbSchema } from "@/lib/seo";
 
 export default function Apply() {
   const [searchParams] = useSearchParams();
   const resumeToken = searchParams.get("token") || undefined;
 
-  useEffect(() => {
-    document.title = "Apply Now | DUSOM Abuja";
-  }, []);
+  const seo = pageSEO.apply;
+  const schemas = [
+    generateBreadcrumbSchema([
+      { name: "Home", url: "/" },
+      { name: "Admissions", url: "/admissions" },
+      { name: resumeToken ? "Continue Application" : "Apply Now", url: "/apply" }
+    ])
+  ];
 
   return (
     <Layout>
+      <PageSEO {...seo} schemas={schemas} />
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden">
         <div
